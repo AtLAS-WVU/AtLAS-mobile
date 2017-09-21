@@ -5,3 +5,4 @@ android:
     - platform-tools
 script:
   - cd AtLAS
+  - gradle build connectedCheck
