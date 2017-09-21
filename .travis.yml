@@ -16,4 +16,4 @@ android:
     - google-gdk-license-.+
 script:
   - cd AtLAS
-  - gradle build connectedCheck
+  - gradle build
