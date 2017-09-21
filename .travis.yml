@@ -8,6 +8,8 @@ android:
     - extra-google-android-support
     - android-14
     - android-26
+    - sys-img-armeabi-v7a-android-14
+    - sys-img-armeabi-v7a-android-26
   licenses:
     - android-sdk-preview-license-.+
     - android-sdk-license-.+
