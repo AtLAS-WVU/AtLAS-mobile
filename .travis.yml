@@ -2,7 +2,12 @@ language: android
 android:
   components:
     - tools
+    - build-tools-26.0.1
     - platform-tools
+    - extra-android-m2repository
+    - extra-google-android-support
+    - android-14
+    - android-26
   licenses:
     - android-sdk-preview-license-.+
     - android-sdk-license-.+
