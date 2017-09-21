@@ -9,4 +9,4 @@
 
 **AtLAS-mobile** is the official repository for the AtLAS (*Autonomous Low Altitude Service*) Android application, developed at West Virginia University.
 
-If you're interested in setting up an AtLAS system you'll also want to visit [**AtLAS-server**](https://github.com/owiegand/AtLAS-server), the home of the backend that powers AtLAS, as well as [**AtLAS-embedded**](https://github.com/ItsTimmy/AtLAS-embedded), the home of the embedded software running on AtLAS drones.
+If you're interested in setting up an AtLAS system, you'll also want to visit [**AtLAS-server**](https://github.com/owiegand/AtLAS-server), the home of the backend that powers AtLAS, as well as [**AtLAS-embedded**](https://github.com/ItsTimmy/AtLAS-embedded), the home of the embedded software running on AtLAS drones.
