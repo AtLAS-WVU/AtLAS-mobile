@@ -26,8 +26,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_send:
                     mTextMessage.setText(R.string.title_send);
                     return true;
+                default:
+                    return false;
             }
-            return false;
         }
 
     };
