@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/colorPrimary"
     tools:context="com.nathantspencer.atlas.LoginActivity">
 
     <!-- Login progress -->
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="40dp" >
+            android:layout_marginBottom="30dp" >
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -75,6 +75,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:textColor="@color/lightWhite"
+                android:background="@color/translucentColorPrimaryDark"
                 android:text="@string/action_sign_in"
                 android:textStyle="bold" />
 
@@ -83,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:gravity="center_horizontal"
-                android:textColor="@color/offWhite"
+                android:textColor="@color/lightWhite"
                 android:text="@string/action_sign_up" />
 
         </LinearLayout>
