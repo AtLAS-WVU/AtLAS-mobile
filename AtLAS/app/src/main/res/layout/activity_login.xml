@@ -30,7 +30,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_gravity="center_vertical" >
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="40dp" >
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -51,7 +52,9 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:theme="@style/LightTextInput" >
+                android:theme="@style/LightTextInput"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp" >
 
                 <EditText
                     android:id="@+id/password"
@@ -74,6 +77,14 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/action_sign_in"
                 android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="center_horizontal"
+                android:textColor="@color/offWhite"
+                android:text="@string/action_sign_up" />
 
         </LinearLayout>
     </ScrollView>
