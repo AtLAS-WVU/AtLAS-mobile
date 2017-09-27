@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="lightWhite">#F9F9FF</color>
+    <color name="lightOffWhite">#EEEEFF</color>
     <color name="offWhite">#D0D0FF</color>
 
     <color name="translucentColorPrimaryDark">#85303F9F</color>

@@ -79,17 +79,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:textColor="@color/lightWhite"
-                android:background="@color/translucentColorPrimaryDark"
+                android:background="@color/colorPrimaryDark"
                 android:text="@string/action_sign_in"
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/sign_up_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:gravity="center_horizontal"
                 android:textColor="@color/lightWhite"
-                android:text="@string/action_sign_up" />
+                android:text="@string/action_start_sign_up" />
 
         </LinearLayout>
     </ScrollView>
