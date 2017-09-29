@@ -53,26 +53,55 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
+    class LoginRequestResponder implements RequestResponder {
+
+        LoginRequestResponder()
+        {
+        }
+
+        public void OnResponse(String response)
+        {
+            VolleyLog.d("Response: %s", response);
+            Boolean success = false;
+            try {
+                JSONObject jsonResponse = new JSONObject(response);
+                success = jsonResponse.getBoolean("success");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if(success)
+            {
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+            else
+            {
+                Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        }
+    }
+
     /**
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
-
-     /* Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mUsernameView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private RequestQueue mRequestQueue;
+
+    protected GeneralRequest mGeneralRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        mGeneralRequest = new GeneralRequest(this.getApplicationContext());
+
         // Set up the login form.
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
         populateAutoComplete();
@@ -107,7 +136,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-        mRequestQueue = Volley.newRequestQueue(this);
     }
 
     private void populateAutoComplete() {
@@ -153,30 +181,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
-    /**
-     * Transitions to SignUpActivity
-     */
-    private void startSignUp() {
+    private void startSignUp()
+    {
         Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
         startActivity(intent);
     }
 
-    /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
-     */
-    private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
+    private void attemptLogin()
+    {
         final String username = mUsernameView.getText().toString();
         final String password = mPasswordView.getText().toString();
 
+        Map<String, String> parameterBody = new HashMap<String, String>();
+        parameterBody.put("username", username);
+        parameterBody.put("password", password);
+
         showProgress(true);
-        mAuthTask = new UserLoginTask(username, password);
-        mAuthTask.execute((Void) null);
+        mGeneralRequest.POSTRequest("CheckLoginInfo.php", parameterBody, new LoginRequestResponder());
     }
 
     /**
@@ -273,84 +294,5 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mUsername;
-        private final String mPassword;
-
-        UserLoginTask(String username, String password) {
-            mUsername = username;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-
-            String url = "http://104.237.135.184/AtLAS/CheckLoginInfo.php";
-            StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    VolleyLog.d("Response: %s", response);
-                    Boolean success = false;
-                    try {
-                        JSONObject jsonResponse = new JSONObject(response);
-                        success = jsonResponse.getBoolean("success");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    if(success)
-                    {
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                    }
-                    else
-                    {
-                        Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    VolleyLog.e(error.getMessage());
-                }
-            }){
-                @Override
-                protected Map<String,String> getParams(){
-                    Map<String,String> params = new HashMap<String, String>();
-                    params.put("username",mUsername);
-                    params.put("password",mPassword);
-                    return params;
-                }
-
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String,String> params = new HashMap<String, String>();
-                    params.put("Content-Type","application/x-www-form-urlencoded");
-                    return params;
-                }
-            };
-            mRequestQueue.add(request);
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(true);
-
-            if (success) {
-                finish();
-            } else {
-
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
 }
 
