@@ -3,6 +3,8 @@ package com.nathantspencer.atlas;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -74,6 +76,34 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
             if(success)
             {
+                String atlasLoginKey = "";
+
+                // clear fields
+                mUsernameView.setText("");
+                mPasswordView.setText("");
+
+                try
+                {
+                    JSONObject jsonResponse = new JSONObject(response);
+                    atlasLoginKey = jsonResponse.getString("key");
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+
+                    // show failure message
+                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                    builder.setMessage("Something went wrong on our end. Try again!")
+                            .setTitle("Hmm...");
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+                // store authentication key
+                SharedPreferences sharedPref = LoginActivity.this.getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("atlasLoginKey", atlasLoginKey);
+                editor.apply();
+
                 // clear fields, transition to MainActivity
                 mUsernameView.setText("");
                 mPasswordView.setText("");
