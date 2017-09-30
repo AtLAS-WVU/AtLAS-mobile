@@ -29,7 +29,6 @@ class GeneralRequest {
         mRequestQueue = Volley.newRequestQueue(applicationContext);
     }
 
-    //
     protected void POSTRequest(final String urlSuffix, final Map<String, String> parameterBody, final RequestResponder responder)
     {
         class POSTTask extends AsyncTask<Void, Void, Boolean> {

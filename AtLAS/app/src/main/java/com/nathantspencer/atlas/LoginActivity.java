@@ -109,6 +109,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 mPasswordView.setText("");
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
             else
             {
@@ -132,6 +133,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         setContentView(R.layout.activity_login);
 
         mGeneralRequest = new GeneralRequest(this.getApplicationContext());
+
+        SharedPreferences sharedPref = LoginActivity.this.getPreferences(Context.MODE_PRIVATE);
+        String atlasLoginKey = sharedPref.getString("atlasLoginKey", "");
+
+        if(!atlasLoginKey.equals(""))
+        {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
 
         // Set up the login form.
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
@@ -213,6 +224,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     {
         Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void attemptLogin()
