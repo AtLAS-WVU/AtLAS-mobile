@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 interface RequestResponder {
-    void OnResponse(String response);
+    void onResponse(String response);
 }
 
 class GeneralRequest {
@@ -30,13 +30,13 @@ class GeneralRequest {
     }
 
     //
-    void POSTRequest(final String urlSuffix, final Map<String, String> parameterBody, final RequestResponder responder)
+    protected void POSTRequest(final String urlSuffix, final Map<String, String> parameterBody, final RequestResponder responder)
     {
         class POSTTask extends AsyncTask<Void, Void, Boolean> {
 
             private final Map<String, String> mParameterBody;
 
-            POSTTask(final Map<String, String> parameterBody) {
+            private POSTTask(final Map<String, String> parameterBody) {
                 mParameterBody = parameterBody;
             }
 
@@ -48,7 +48,7 @@ class GeneralRequest {
                     @Override
                     public void onResponse(String response) {
                         VolleyLog.d("Response: %s", response);
-                        responder.OnResponse(response);
+                        responder.onResponse(response);
                     }
                 }, new Response.ErrorListener() {
                     @Override
