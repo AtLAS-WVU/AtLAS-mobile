@@ -1,7 +1,6 @@
 package com.nathantspencer.atlas;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 
 import com.android.volley.AuthFailureError;
@@ -12,9 +11,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,6 +47,7 @@ class GeneralRequest {
                 StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        VolleyLog.d("Response: %s", response);
                         responder.OnResponse(response);
                     }
                 }, new Response.ErrorListener() {

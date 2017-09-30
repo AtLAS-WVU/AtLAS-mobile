@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -14,7 +15,6 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -28,15 +28,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,7 +44,7 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
-    class LoginRequestResponder implements RequestResponder {
+    private class LoginRequestResponder implements RequestResponder {
 
         LoginRequestResponder()
         {
@@ -61,23 +52,39 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         public void OnResponse(String response)
         {
-            VolleyLog.d("Response: %s", response);
+            // grab value of response field "success"
             Boolean success = false;
-            try {
+            try
+            {
                 JSONObject jsonResponse = new JSONObject(response);
                 success = jsonResponse.getBoolean("success");
-            } catch (JSONException e) {
+            }
+            catch (JSONException e)
+            {
                 e.printStackTrace();
             }
+
+            showProgress(false);
             if(success)
             {
+                // clear fields, transition to MainActivity
+                mUsernameView.setText("");
+                mPasswordView.setText("");
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
             }
             else
             {
-                Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
-                startActivity(intent);
+                // show login failure alert
+                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                builder.setMessage("Username or password you entered is incorrect. Try again!")
+                        .setTitle("Login Failed");
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                // clear fields
+                mUsernameView.setText("");
+                mPasswordView.setText("");
             }
         }
     }
