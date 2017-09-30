@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         {
         }
 
-        public void OnResponse(String response)
+        public void onResponse(String response)
         {
             // grab value of response field "success"
             Boolean success = false;
