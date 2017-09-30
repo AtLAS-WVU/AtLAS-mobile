@@ -51,7 +51,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
 
-    protected GeneralRequest mGeneralRequest;
+    protected static String mUsername;
+    protected static GeneralRequest mGeneralRequest;
 
     private class LoginRequestResponder implements RequestResponder {
 
@@ -98,6 +99,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 }
+
                 // store authentication key
                 SharedPreferences sharedPref = LoginActivity.this.getSharedPreferences("AUTH", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
@@ -227,6 +229,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     {
         final String username = mUsernameView.getText().toString();
         final String password = mPasswordView.getText().toString();
+        mUsername = username;
 
         Map<String, String> parameterBody = new HashMap<>();
         parameterBody.put("username", username);
@@ -240,7 +243,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
+    protected void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
