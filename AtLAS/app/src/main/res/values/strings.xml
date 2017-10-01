@@ -21,4 +21,5 @@
         completions."
     </string>
     <string name="title_activity_sign_up">AtLAS Sign Up</string>
+    <string name="profile_button">Click to view/edit profile</string>
 </resources>

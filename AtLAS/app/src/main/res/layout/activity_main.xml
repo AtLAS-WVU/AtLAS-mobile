@@ -48,13 +48,29 @@
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme" >
 
+            <ImageButton
+                android:id="@+id/profileButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="start"
+                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="7dp"
+                android:clickable="true"
+                android:contentDescription="@string/profile_button"
+                android:tint="@color/colorPrimaryDark"
+                android:background="@color/lightWhite"
+                app:srcCompat="@drawable/ic_person_black_24dp" />
+
             <TextView
                 android:id="@+id/usernameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="start"
+                android:layout_marginStart="15dp"
+                android:layout_marginLeft="15dp"
                 android:gravity="center_vertical"
-                android:textColor="@color/lightWhite"
+                android:textColor="@color/offWhite"
                 android:textSize="16sp"
                 android:text="" />
 
