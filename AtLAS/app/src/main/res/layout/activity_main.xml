@@ -17,15 +17,17 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/signOutButton"
-            android:layout_width="78dp"
-            android:layout_height="62dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="end"
-            android:layout_margin="20dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="7dp"
             android:clickable="true"
             android:tint="@color/colorPrimary"
             app:backgroundTint="@color/lightWhite"
-            app:elevation="4dp"
-            app:fabSize="normal"
+            app:elevation="5dp"
+            app:fabSize="mini"
             app:srcCompat="@drawable/ic_sign_out_black_24dp" />
 
         <TextView
@@ -37,6 +39,26 @@
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:text="@string/title_send" />
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme" >
+
+            <TextView
+                android:id="@+id/usernameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_vertical"
+                android:textColor="@color/lightWhite"
+                android:textSize="16sp"
+                android:text="" />
+
+        </android.support.v7.widget.Toolbar>
 
     </FrameLayout>
 

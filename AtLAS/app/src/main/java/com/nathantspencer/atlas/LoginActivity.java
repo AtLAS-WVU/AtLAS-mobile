@@ -50,8 +50,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private String mUsername;
 
-    protected static String mUsername;
     protected static GeneralRequest mGeneralRequest;
 
     private class LoginRequestResponder implements RequestResponder {
@@ -103,6 +103,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 // store authentication key
                 SharedPreferences sharedPref = LoginActivity.this.getSharedPreferences("AUTH", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString("atlasUsername", mUsername);
                 editor.putString("atlasLoginKey", atlasLoginKey);
                 editor.apply();
 
@@ -138,6 +139,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         // check for authentication key
         SharedPreferences sharedPref = LoginActivity.this.getSharedPreferences("AUTH", Context.MODE_PRIVATE);
+        String mUsername = sharedPref.getString("atlasUsername", "");
         String atlasLoginKey = sharedPref.getString("atlasLoginKey", "");
 
         if(!("").equals(atlasLoginKey))

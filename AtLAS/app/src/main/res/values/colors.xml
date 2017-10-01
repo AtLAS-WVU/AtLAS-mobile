@@ -5,8 +5,8 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="lightWhite">#f9f9ff</color>
-    <color name="lightOffWhite">#EEEEFF</color>
+    <color name="lightOffWhite">#eeeeff</color>
     <color name="offWhite">#d0d0ff</color>
 
-    <color name="translucentColorPrimaryDark">#85303F9F</color>
+    <color name="translucentColorPrimaryDark">#85303f9f</color>
 </resources>

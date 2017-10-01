@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.nathantspencer.atlas.LoginActivity.mGeneralRequest;
-import static com.nathantspencer.atlas.LoginActivity.mUsername;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -103,6 +102,11 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        SharedPreferences sharedPref = MainActivity.this.getSharedPreferences("AUTH", Context.MODE_PRIVATE);
+        String username = sharedPref.getString("atlasUsername", "");
+        TextView usernameTextView = (TextView) findViewById(R.id.usernameTextView);
+        usernameTextView.setText(username);
+
         mSignOutButton = (FloatingActionButton) findViewById(R.id.signOutButton);
         mSignOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,10 +114,11 @@ public class MainActivity extends AppCompatActivity {
 
                 // send sign out request
                 SharedPreferences sharedPref = MainActivity.this.getSharedPreferences("AUTH", Context.MODE_PRIVATE);
+                String username = sharedPref.getString("atlasUsername", "");
                 String atlasLoginKey = sharedPref.getString("atlasLoginKey", "");
 
                 Map<String, String> parameterBody = new HashMap<>();
-                parameterBody.put("username", mUsername);
+                parameterBody.put("username", username);
                 parameterBody.put("key", atlasLoginKey);
                 mGeneralRequest.POSTRequest("LogUserOut.php", parameterBody, new LogoutRequestResponder());
 
