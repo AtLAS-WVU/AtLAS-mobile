@@ -15,21 +15,6 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/signOutButton"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="7dp"
-            android:clickable="true"
-            android:tint="@color/colorPrimary"
-            app:backgroundTint="@color/lightWhite"
-            app:elevation="5dp"
-            app:fabSize="mini"
-            app:srcCompat="@drawable/ic_sign_out_black_24dp" />
-
         <TextView
             android:id="@+id/message"
             android:layout_width="match_parent"
@@ -59,7 +44,7 @@
                 android:clickable="true"
                 android:contentDescription="@string/profile_button"
                 android:tint="@color/colorPrimaryDark"
-                android:background="@color/lightWhite"
+                android:background="@drawable/rounded_corners"
                 app:srcCompat="@drawable/ic_person_black_24dp" />
 
             <TextView
@@ -73,6 +58,21 @@
                 android:textColor="@color/offWhite"
                 android:textSize="16sp"
                 android:text="" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/signOutButton"
+                android:layout_width="37dp"
+                android:layout_height="37dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:tint="@color/colorPrimary"
+                app:backgroundTint="@color/lightWhite"
+                app:elevation="5dp"
+                app:fabSize="mini"
+                app:srcCompat="@drawable/ic_sign_out_black_24dp" />
 
         </android.support.v7.widget.Toolbar>
 
