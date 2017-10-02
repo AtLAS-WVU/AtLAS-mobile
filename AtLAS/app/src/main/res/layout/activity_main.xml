@@ -35,8 +35,8 @@
 
             <ImageButton
                 android:id="@+id/profileButton"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="37dp"
+                android:layout_height="37dp"
                 android:layout_gravity="start"
                 android:layout_marginLeft="15dp"
                 android:layout_marginStart="15dp"
@@ -68,9 +68,8 @@
                 android:layout_marginRight="10dp"
                 android:gravity="center_vertical"
                 android:clickable="true"
-                android:tint="@color/colorPrimary"
+                android:tint="@color/colorPrimaryDark"
                 app:backgroundTint="@color/lightWhite"
-                app:elevation="5dp"
                 app:fabSize="mini"
                 app:srcCompat="@drawable/ic_sign_out_black_24dp" />
 
