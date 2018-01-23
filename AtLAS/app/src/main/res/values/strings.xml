@@ -6,10 +6,13 @@
     <string name="title_add_friends">Add Friends</string>
     <string name="title_activity_login">Sign in</string>
 
-    <!-- Strings related to login -->
+    <!-- Strings related to log in / sign up -->
     <string name="prompt_username">Username</string>
     <string name="prompt_password">Password</string>
     <string name="prompt_email">Email</string>
+    <string name="prompt_first_name">First Name</string>
+    <string name="prompt_last_name">Last Name</string>
+
     <string name="action_sign_in">Sign in</string>
     <string name="action_start_sign_up"><u>Don\'t have an account? Sign up</u></string>
     <string name="action_finish_sign_up">Sign Up</string>

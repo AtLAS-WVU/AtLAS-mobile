@@ -56,40 +56,31 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private class LoginRequestResponder implements RequestResponder {
 
-        LoginRequestResponder()
-        {
+        LoginRequestResponder() {
         }
 
-        public void onResponse(String response)
-        {
+        public void onResponse(String response) {
             // grab value of response field "success"
             Boolean success = false;
-            try
-            {
+            try {
                 JSONObject jsonResponse = new JSONObject(response);
                 success = jsonResponse.getBoolean("success");
-            }
-            catch (JSONException e)
-            {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
 
             showProgress(false);
-            if(success)
-            {
+            if (success) {
                 String atlasLoginKey = "";
 
                 // clear fields
                 mUsernameView.setText("");
                 mPasswordView.setText("");
 
-                try
-                {
+                try {
                     JSONObject jsonResponse = new JSONObject(response);
                     atlasLoginKey = jsonResponse.getString("key");
-                }
-                catch (JSONException e)
-                {
+                } catch (JSONException e) {
                     e.printStackTrace();
 
                     // show failure message
@@ -107,15 +98,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 editor.putString("atlasLoginKey", atlasLoginKey);
                 editor.apply();
 
-                // clear fields, transition to MainActivity
-                mUsernameView.setText("");
-                mPasswordView.setText("");
+                // transition to MainActivity
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
-            }
-            else
-            {
+
+            } else {
+
                 // show login failure alert
                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                 builder.setMessage("Username or password you entered is incorrect. Try again!")
@@ -128,6 +117,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 mPasswordView.setText("");
             }
         }
+    }
+
+    public static GeneralRequest GetGeneralRequest()
+    {
+        return mGeneralRequest;
     }
 
     @Override
@@ -165,16 +159,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button emailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        emailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 attemptLogin();
             }
         });
 
-        TextView mSignUpButton = (TextView) findViewById(R.id.sign_up_button);
-        mSignUpButton.setOnClickListener(new OnClickListener() {
+        TextView signUpButton = (TextView) findViewById(R.id.sign_up_button);
+        signUpButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
