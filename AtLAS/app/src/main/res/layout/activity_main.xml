@@ -77,17 +77,6 @@
 
     </FrameLayout>
 
-    <ImageView
-        android:layout_gravity="center"
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_marginBottom="100dp"
-        android:scaleType="fitCenter"
-        android:scaleX="0.75"
-        android:scaleY="0.75"
-        android:src="@drawable/logo" />
-
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="match_parent"

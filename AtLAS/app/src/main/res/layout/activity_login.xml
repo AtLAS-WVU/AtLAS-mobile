@@ -23,6 +23,16 @@
         android:indeterminate="true"
         android:indeterminateDrawable="@drawable/progress" />
 
+    <ImageView
+        android:layout_gravity="center"
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="290dp"
+        android:scaleType="fitCenter"
+        android:scaleX="0.75"
+        android:scaleY="0.75"
+        android:src="@drawable/logo" />
+
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"

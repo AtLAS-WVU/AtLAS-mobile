@@ -15,58 +15,99 @@ import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
 
-interface RequestResponder {
+/**
+ * An object implementing this interface is needed to respond to requests made through
+ * {@code GeneralRequest}. Typically, anonymous instances of private nested classes implementing
+ * this interface are used.
+ */
+interface RequestResponder
+{
+    /**
+     * A function which handles the response received from a request.
+     *
+     * @param response a String response to be handled
+     */
     void onResponse(String response);
 }
 
-class GeneralRequest {
+/**
+ * A singleton owned and maintained by {@code LoginActivity} which oversees the lone Volley request
+ * queue used by AtLAS. It is used to make POST and GET requests.
+ *
+ * @see LoginActivity
+ */
+public class GeneralRequest
+{
 
     private RequestQueue mRequestQueue;
     final private String mBaseURL = "http://104.237.135.184/AtLAS/";
 
+    /**
+     * Constructor for {@code GeneralRequest}.
+     *
+     * @param applicationContext context of the owning activity
+     */
     GeneralRequest(Context applicationContext)
     {
         mRequestQueue = Volley.newRequestQueue(applicationContext);
     }
 
-    protected void POSTRequest(final String urlSuffix, final Map<String, String> parameterBody, final RequestResponder responder)
+    /**
+     * Performs a POST request and handles the response according to the {@code RequestResponder}
+     * provided.
+     *
+     * @param urlSuffix the String URL endpoint to be appended to the base URL
+     * @param parameterBody a map containing the names and values of all data fields in the request
+     * @param responder a RequestResponder which handles the response from the POST request
+     *
+     * @see RequestResponder
+     */
+    public void POSTRequest(final String urlSuffix, final Map<String, String> parameterBody, final RequestResponder responder)
     {
-        class POSTTask extends AsyncTask<Void, Void, Boolean> {
+
+        class POSTTask extends AsyncTask<Void, Void, Boolean>
+        {
 
             private final Map<String, String> mParameterBody;
 
-            private POSTTask(final Map<String, String> parameterBody) {
+            private POSTTask(final Map<String, String> parameterBody)
+            {
                 mParameterBody = parameterBody;
             }
 
             @Override
-            protected Boolean doInBackground(Void... params) {
-
+            protected Boolean doInBackground(Void... params)
+            {
                 String url = mBaseURL + urlSuffix;
                 StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override
-                    public void onResponse(String response) {
+                    public void onResponse(String response)
+										{
                         VolleyLog.d("Response: %s", response);
                         responder.onResponse(response);
                     }
                 }, new Response.ErrorListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
+                    public void onErrorResponse(VolleyError error)
+										{
                         VolleyLog.e(error.getMessage());
                     }
                 }){
                     @Override
-                    protected Map<String,String> getParams(){
+                    protected Map<String,String> getParams()
+                    {
                         return parameterBody;
                     }
 
                     @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
+                    public Map<String, String> getHeaders() throws AuthFailureError
+                    {
                         Map<String,String> params = new HashMap<>();
                         params.put("Content-Type","application/x-www-form-urlencoded");
                         return params;
                     }
                 };
+
                 mRequestQueue.add(request);
                 return true;
             }
