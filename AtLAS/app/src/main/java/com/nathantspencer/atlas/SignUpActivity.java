@@ -17,6 +17,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Activity which provides an interface for user sign up.
+ */
 public class SignUpActivity extends AppCompatActivity {
 
     private AutoCompleteTextView mEmailView;
@@ -29,8 +32,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private class SignUpRequestResponder implements RequestResponder {
 
-        SignUpRequestResponder() {
-        }
+        SignUpRequestResponder(){}
 
         public void onResponse(String response) {
             // grab value of response field "success"
@@ -92,7 +94,8 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -113,8 +116,8 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    private void finishSignUp() {
-
+    private void finishSignUp()
+    {
         final String username = mUsernameView.getText().toString();
         final String password = mPasswordView.getText().toString();
         final String email = mEmailView.getText().toString();
