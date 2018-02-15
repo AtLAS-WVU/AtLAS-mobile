@@ -28,10 +28,8 @@ public class SignUpActivity extends AppCompatActivity {
     private AutoCompleteTextView mLastNameView;
     private EditText mPasswordView;
 
-    protected static GeneralRequest mGeneralRequest;
-
-    private class SignUpRequestResponder implements RequestResponder {
-
+    private class SignUpRequestResponder implements RequestResponder
+    {
         SignUpRequestResponder(){}
 
         public void onResponse(String response) {

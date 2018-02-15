@@ -42,7 +42,8 @@ import java.util.Map;
 import static android.Manifest.permission.READ_CONTACTS;
 
 
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>
+{
 
     private static final int REQUEST_READ_CONTACTS = 0;
 
@@ -50,37 +51,46 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private View mLogoView;
     private String mUsername;
 
     protected static GeneralRequest mGeneralRequest;
 
-    private class LoginRequestResponder implements RequestResponder {
+    private class LoginRequestResponder implements RequestResponder
+    {
 
-        LoginRequestResponder() {
-        }
+        LoginRequestResponder() {}
 
-        public void onResponse(String response) {
+        public void onResponse(String response)
+        {
             // grab value of response field "success"
             Boolean success = false;
-            try {
+            try
+            {
                 JSONObject jsonResponse = new JSONObject(response);
                 success = jsonResponse.getBoolean("success");
-            } catch (JSONException e) {
+            }
+            catch (JSONException e)
+            {
                 e.printStackTrace();
             }
 
             showProgress(false);
-            if (success) {
+            if (success)
+            {
                 String atlasLoginKey = "";
 
                 // clear fields
                 mUsernameView.setText("");
                 mPasswordView.setText("");
 
-                try {
+                try
+                {
                     JSONObject jsonResponse = new JSONObject(response);
                     atlasLoginKey = jsonResponse.getString("key");
-                } catch (JSONException e) {
+                }
+                catch (JSONException e)
+                {
                     e.printStackTrace();
 
                     // show failure message
@@ -102,9 +112,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
-
-            } else {
-
+            }
+            else
+            {
                 // show login failure alert
                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                 builder.setMessage("Username or password you entered is incorrect. Try again!")
@@ -125,7 +135,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -179,6 +190,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        mLogoView = findViewById(R.id.logo_view);
     }
 
     private void populateAutoComplete() {
@@ -239,7 +251,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    protected void showProgress(final boolean show) {
+    protected void showProgress(final boolean show)
+    {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
@@ -265,7 +278,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle)
+    {
         return new CursorLoader(this,
                 // Retrieve data rows for the device user's 'profile' contact.
                 Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
@@ -282,7 +296,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor)
+    {
         List<String> usernames = new ArrayList<>();
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -297,7 +312,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
     }
 
-    private void addUsernameToAutoComplete(List<String> usernameCollection) {
+    private void addUsernameToAutoComplete(List<String> usernameCollection)
+    {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(LoginActivity.this,
@@ -307,7 +323,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
 
-    private interface ProfileQuery {
+    private interface ProfileQuery
+    {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
                 ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
