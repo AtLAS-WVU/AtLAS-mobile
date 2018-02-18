@@ -25,4 +25,6 @@
     </string>
     <string name="title_activity_sign_up">AtLAS Sign Up</string>
     <string name="profile_button">Click to view/edit profile</string>
+    <string name="title_activity_add_friend">AddFriendActivity</string>
+    <string name="add_friends">Add Friends</string>
 </resources>

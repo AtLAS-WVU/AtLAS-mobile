@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Button;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FloatingActionButton mSignOutButton;
     private View mAddFriendButton;
+    private View mMapView;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
             // clear all elements before displaying those which are relevant
             mAddFriendButton.setVisibility(View.GONE);
+            mMapView.setVisibility(View.GONE);
 
             switch (item.getItemId()) {
 
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
 
                 case R.id.navigation_map:
+                    mMapView.setVisibility(View.VISIBLE);
                     return true;
 
                 case R.id.navigation_send:
@@ -106,7 +108,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mSignOutButton = (FloatingActionButton) findViewById(R.id.signOutButton);
         mAddFriendButton = findViewById(R.id.add_friend_button);
+        mMapView = findViewById(R.id.map_view);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -117,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
         TextView usernameTextView = (TextView) findViewById(R.id.usernameTextView);
         usernameTextView.setText(username);
 
-        mSignOutButton = (FloatingActionButton) findViewById(R.id.signOutButton);
         mSignOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,6 +137,15 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        mAddFriendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, AddFriendActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
 }

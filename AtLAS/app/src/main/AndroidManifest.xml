@@ -37,8 +37,17 @@
             android:name=".SignUpActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_sign_up"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".AddFriendActivity"
+            android:label="@string/title_activity_add_friend"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nathantspencer.atlas.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
