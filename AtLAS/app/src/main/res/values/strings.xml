@@ -2,7 +2,7 @@
     <string name="app_name">AtLAS</string>
     <string name="title_history">History</string>
     <string name="title_map">Map</string>
-    <string name="title_send">Send</string>
+    <string name="title_friends">Friends</string>
     <string name="title_add_friends">Add Friends</string>
     <string name="title_activity_login">Sign in</string>
 

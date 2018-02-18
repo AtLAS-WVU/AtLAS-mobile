@@ -9,6 +9,56 @@
     android:orientation="vertical"
     tools:context="com.nathantspencer.atlas.MainActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme">
+
+        <ImageButton
+            android:id="@+id/profileButton"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
+            android:layout_gravity="start"
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="7dp"
+            android:background="@drawable/rounded_corners"
+            android:clickable="true"
+            android:contentDescription="@string/profile_button"
+            android:tint="@color/colorPrimaryDark"
+            app:srcCompat="@drawable/ic_person_black_24dp" />
+
+        <TextView
+            android:id="@+id/usernameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
+            android:gravity="center_vertical"
+            android:text=""
+            android:textColor="@color/offWhite"
+            android:textSize="16sp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/signOutButton"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:clickable="true"
+            android:gravity="center_vertical"
+            android:tint="@color/colorPrimaryDark"
+            app:backgroundTint="@color/lightWhite"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_sign_out_black_24dp" />
+
+    </android.support.v7.widget.Toolbar>
+
     <FrameLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
@@ -23,57 +73,15 @@
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/title_send" />
+            android:text="@string/title_friends" />
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar2"
+        <Button
+            android:id="@+id/add_friend_button"
+            style="@style/Widget.AppCompat.Button.Colored"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme" >
-
-            <ImageButton
-                android:id="@+id/profileButton"
-                android:layout_width="37dp"
-                android:layout_height="37dp"
-                android:layout_gravity="start"
-                android:layout_marginLeft="15dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="7dp"
-                android:clickable="true"
-                android:contentDescription="@string/profile_button"
-                android:tint="@color/colorPrimaryDark"
-                android:background="@drawable/rounded_corners"
-                app:srcCompat="@drawable/ic_person_black_24dp" />
-
-            <TextView
-                android:id="@+id/usernameTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_marginStart="15dp"
-                android:layout_marginLeft="15dp"
-                android:gravity="center_vertical"
-                android:textColor="@color/offWhite"
-                android:textSize="16sp"
-                android:text="" />
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/signOutButton"
-                android:layout_width="37dp"
-                android:layout_height="37dp"
-                android:layout_gravity="end"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:gravity="center_vertical"
-                android:clickable="true"
-                android:tint="@color/colorPrimaryDark"
-                app:backgroundTint="@color/lightWhite"
-                app:fabSize="mini"
-                app:srcCompat="@drawable/ic_sign_out_black_24dp" />
-
-        </android.support.v7.widget.Toolbar>
+            android:layout_margin="10dp"
+            android:text="Add Friend" />
 
     </FrameLayout>
 
