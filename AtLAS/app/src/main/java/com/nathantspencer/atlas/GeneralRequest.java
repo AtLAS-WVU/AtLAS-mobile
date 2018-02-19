@@ -116,4 +116,69 @@ public class GeneralRequest
         POSTTask task = new POSTTask(parameterBody);
         task.execute((Void) null);
     }
+
+    /**
+     * Performs a GET request and handles the response according to the {@code RequestResponder}
+     * provided.
+     *
+     * @param urlSuffix the String URL endpoint to be appended to the base URL
+     * @param parameterBody a map containing the names and values of all data fields in the request
+     * @param responder a RequestResponder which handles the response from the GET request
+     *
+     * @see RequestResponder
+     */
+    public void GETRequest(final String urlSuffix, final Map<String, String> parameterBody, final RequestResponder responder)
+    {
+
+        class GETTask extends AsyncTask<Void, Void, Boolean>
+        {
+
+            private final Map<String, String> mParameterBody;
+
+            private GETTask(final Map<String, String> parameterBody)
+            {
+                mParameterBody = parameterBody;
+            }
+
+            @Override
+            protected Boolean doInBackground(Void... params)
+            {
+                String url = mBaseURL + urlSuffix;
+                StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response)
+                    {
+                        VolleyLog.d("Response: %s", response);
+                        responder.onResponse(response);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error)
+                    {
+                        VolleyLog.e(error.getMessage());
+                    }
+                }){
+                    @Override
+                    protected Map<String,String> getParams()
+                    {
+                        return parameterBody;
+                    }
+
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError
+                    {
+                        Map<String,String> params = new HashMap<>();
+                        params.put("Content-Type","application/x-www-form-urlencoded");
+                        return params;
+                    }
+                };
+
+                mRequestQueue.add(request);
+                return true;
+            }
+        }
+
+        GETTask task = new GETTask(parameterBody);
+        task.execute((Void) null);
+    }
 }
