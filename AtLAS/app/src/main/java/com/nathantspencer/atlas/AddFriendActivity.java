@@ -69,6 +69,7 @@ public class AddFriendActivity extends AppCompatActivity {
                     mLastNameText.setVisibility(View.VISIBLE);
                     mFriendStatusLabel.setVisibility(View.VISIBLE);
                     mFriendStatusText.setVisibility(View.VISIBLE);
+                    mAddFriendButton.setVisibility(View.INVISIBLE);
 
                     SharedPreferences sharedPref = AddFriendActivity.this.getSharedPreferences("AUTH", Context.MODE_PRIVATE);
                     String username = sharedPref.getString("atlasUsername", "");
@@ -104,6 +105,28 @@ public class AddFriendActivity extends AppCompatActivity {
                 {
                     e.printStackTrace();
                 }
+            }
+        }
+    }
+
+    private class AddFriendRequestResponder implements RequestResponder {
+
+        AddFriendRequestResponder()
+        {
+        }
+
+        public void onResponse(String response)
+        {
+            // grab value of response field "success"
+            Boolean success = false;
+            try
+            {
+                JSONObject jsonResponse = new JSONObject(response);
+                success = jsonResponse.getBoolean("success");
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
             }
         }
     }
@@ -153,21 +176,18 @@ public class AddFriendActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                // send search request
                 SharedPreferences sharedPref = AddFriendActivity.this.getSharedPreferences("AUTH", Context.MODE_PRIVATE);
                 String username = sharedPref.getString("atlasUsername", "");
                 String atlasLoginKey = sharedPref.getString("atlasLoginKey", "");
-                String friendUsername = mUsernameText.getText().toString();
+                String friendUsername = mResultText.getText().toString();
 
                 Map<String, String> parameterBody = new HashMap<>();
                 parameterBody.put("username", username);
                 parameterBody.put("friend_username", friendUsername);
                 parameterBody.put("token", atlasLoginKey);
 
-                if(!friendUsername.equals(""))
-                {
-                    mGeneralRequest.POSTRequest("UserByUsername.php", parameterBody, new AddFriendActivity.UserSearchRequestResponder());
-                }
+                mGeneralRequest.POSTRequest("RequestFriend.php", parameterBody, new AddFriendActivity.AddFriendRequestResponder());
+                mGeneralRequest.POSTRequest("UserByUsername.php", parameterBody, new AddFriendActivity.UserSearchRequestResponder());
             }
         });
 
