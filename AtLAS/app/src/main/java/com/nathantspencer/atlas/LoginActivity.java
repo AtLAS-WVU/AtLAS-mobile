@@ -125,6 +125,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 // clear fields
                 mUsernameView.setText("");
                 mPasswordView.setText("");
+                mLogoView.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -191,6 +192,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         mLogoView = findViewById(R.id.logo_view);
+        mLogoView.setVisibility(View.VISIBLE);
     }
 
     private void populateAutoComplete() {

@@ -11,8 +11,10 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private FloatingActionButton mSignOutButton;
     private View mAddFriendButton;
     private View mMapView;
+    private ListView mFriendsList;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -57,6 +60,33 @@ public class MainActivity extends AppCompatActivity {
         }
 
     };
+
+    private class FriendsListRequestResponder implements RequestResponder {
+
+        FriendsListRequestResponder()
+        {
+        }
+
+        public void onResponse(String response)
+        {
+            // grab value of response field "success"
+            Boolean success = false;
+            try
+            {
+                JSONObject jsonResponse = new JSONObject(response);
+                success = jsonResponse.getBoolean("success");
+
+                if(success)
+                {
+                    JSONArray friends = jsonResponse.getJSONArray("connections");
+                }
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
 
     private class LogoutRequestResponder implements RequestResponder {
 
@@ -104,32 +134,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mSignOutButton = (FloatingActionButton) findViewById(R.id.signOutButton);
         mAddFriendButton = findViewById(R.id.add_friend_button);
         mMapView = findViewById(R.id.map_view);
+        mFriendsList = (ListView) findViewById(R.id.friend_list);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.getMenu().getItem(1).setChecked(true);
 
         SharedPreferences sharedPref = MainActivity.this.getSharedPreferences("AUTH", Context.MODE_PRIVATE);
-        String username = sharedPref.getString("atlasUsername", "");
+        final String username = sharedPref.getString("atlasUsername", "");
+        final String atlasLoginKey = sharedPref.getString("atlasLoginKey", "");
         TextView usernameTextView = (TextView) findViewById(R.id.usernameTextView);
         usernameTextView.setText(username);
+
+
+        Map<String, String> parameterBody = new HashMap<>();
+        parameterBody.put("username", username);
+        parameterBody.put("token", atlasLoginKey);
+        mGeneralRequest.GETRequest("FriendsList.php", parameterBody, new FriendsListRequestResponder());
 
         mSignOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                // send sign out request
-                SharedPreferences sharedPref = MainActivity.this.getSharedPreferences("AUTH", Context.MODE_PRIVATE);
-                String username = sharedPref.getString("atlasUsername", "");
-                String atlasLoginKey = sharedPref.getString("atlasLoginKey", "");
-
                 Map<String, String> parameterBody = new HashMap<>();
                 parameterBody.put("username", username);
                 parameterBody.put("key", atlasLoginKey);

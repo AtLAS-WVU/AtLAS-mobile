@@ -143,7 +143,18 @@ public class GeneralRequest
             @Override
             protected Boolean doInBackground(Void... params)
             {
-                String url = mBaseURL + urlSuffix;
+                String paramUri = "?";
+
+                for (Map.Entry<String, String> entry : parameterBody.entrySet())
+                {
+                    String key = entry.getKey();
+                    String value = entry.getValue();
+
+                    paramUri = paramUri + key + "=" + value + "&";
+                }
+
+                paramUri = paramUri.substring(0, paramUri.length() - 1);
+                String url = mBaseURL + urlSuffix + paramUri;
                 StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response)
