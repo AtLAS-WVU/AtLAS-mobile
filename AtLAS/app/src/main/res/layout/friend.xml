@@ -42,14 +42,14 @@
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/confirm_friend"
+        android:layout_below="@+id/list_item_string"
         android:layout_toEndOf="@+id/friend_avi"
         android:layout_toRightOf="@+id/friend_avi"
         android:paddingBottom="2dp"
         android:paddingLeft="12dp"
         android:paddingTop="0dp"
         android:text="First Last"
-        android:textSize="12sp" />
+        android:textSize="10sp" />
 
     <Button
         android:id="@+id/deny_friend"
