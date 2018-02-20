@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -18,7 +19,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.nathantspencer.atlas.LoginActivity.mGeneralRequest;
@@ -30,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
     private View mMapView;
     private ListView mFriendsList;
 
+    private ArrayList<String> mFriendUsernames;
+    private ArrayList<Boolean> mFriendIsPending;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -39,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
             // clear all elements before displaying those which are relevant
             mAddFriendButton.setVisibility(View.GONE);
             mMapView.setVisibility(View.GONE);
+            mFriendsList.setVisibility(View.GONE);
 
             switch (item.getItemId()) {
 
@@ -51,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.navigation_send:
                     mAddFriendButton.setVisibility(View.VISIBLE);
-
+                    mFriendsList.setVisibility(View.VISIBLE);
                     return true;
 
                 default:
@@ -60,6 +68,39 @@ public class MainActivity extends AppCompatActivity {
         }
 
     };
+
+    private class PendingListRequestResponder implements RequestResponder {
+
+        PendingListRequestResponder()
+        {
+        }
+
+        public void onResponse(String response)
+        {
+            // grab value of response field "success"
+            Boolean success = false;
+            try
+            {
+                JSONObject jsonResponse = new JSONObject(response);
+                success = jsonResponse.getBoolean("success");
+
+                if(success)
+                {
+                    JSONArray friends = jsonResponse.getJSONArray("pending_friends");
+                    for (int i = 0; i < friends.length(); i++)
+                    {
+                        JSONObject friend = friends.getJSONObject(i);
+                        mFriendUsernames.add(friend.get("username").toString());
+                        mFriendIsPending.add(true);
+                    }
+                }
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
 
     private class FriendsListRequestResponder implements RequestResponder {
 
@@ -79,6 +120,20 @@ public class MainActivity extends AppCompatActivity {
                 if(success)
                 {
                     JSONArray friends = jsonResponse.getJSONArray("connections");
+                    for (int i = 0; i < friends.length(); i++)
+                    {
+                        JSONObject friend = friends.getJSONObject(i);
+                        if (friend.get("status").equals("friend"))
+                        {
+                            mFriendUsernames.add(friend.get("username").toString());
+                            mFriendIsPending.add(false);
+                        }
+                    }
+
+                    final FriendsArrayAdapter arrayAdapter = new FriendsArrayAdapter
+                            (mFriendUsernames, mFriendIsPending, MainActivity.this);
+
+                    mFriendsList.setAdapter(arrayAdapter);
                 }
             }
             catch (JSONException e)
@@ -133,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -144,6 +200,9 @@ public class MainActivity extends AppCompatActivity {
         mMapView = findViewById(R.id.map_view);
         mFriendsList = (ListView) findViewById(R.id.friend_list);
 
+        mFriendUsernames = new ArrayList<>();
+        mFriendIsPending = new ArrayList<>();
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.getMenu().getItem(1).setChecked(true);
@@ -154,10 +213,10 @@ public class MainActivity extends AppCompatActivity {
         TextView usernameTextView = (TextView) findViewById(R.id.usernameTextView);
         usernameTextView.setText(username);
 
-
         Map<String, String> parameterBody = new HashMap<>();
         parameterBody.put("username", username);
         parameterBody.put("token", atlasLoginKey);
+        mGeneralRequest.GETRequest("PendingFriends.php", parameterBody, new PendingListRequestResponder());
         mGeneralRequest.GETRequest("FriendsList.php", parameterBody, new FriendsListRequestResponder());
 
         mSignOutButton.setOnClickListener(new View.OnClickListener() {
