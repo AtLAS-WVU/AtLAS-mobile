@@ -11,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -20,9 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.nathantspencer.atlas.LoginActivity.mGeneralRequest;
@@ -36,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ArrayList<String> mFriendUsernames;
     private ArrayList<Boolean> mFriendIsPending;
+    private ArrayList<String> mFriendNames;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -91,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                     {
                         JSONObject friend = friends.getJSONObject(i);
                         mFriendUsernames.add(friend.get("username").toString());
+                        mFriendNames.add(friend.get("first_name") + " " + friend.get("last_name"));
                         mFriendIsPending.add(true);
                     }
                 }
@@ -126,12 +125,13 @@ public class MainActivity extends AppCompatActivity {
                         if (friend.get("status").equals("friend"))
                         {
                             mFriendUsernames.add(friend.get("username").toString());
+                            mFriendNames.add(friend.get("first_name") + " " + friend.get("last_name"));
                             mFriendIsPending.add(false);
                         }
                     }
 
                     final FriendsArrayAdapter arrayAdapter = new FriendsArrayAdapter
-                            (mFriendUsernames, mFriendIsPending, MainActivity.this);
+                            (mFriendUsernames, mFriendIsPending, mFriendNames, MainActivity.this);
 
                     mFriendsList.setAdapter(arrayAdapter);
                 }
@@ -196,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
 
         mFriendIsPending.clear();
         mFriendUsernames.clear();
+        mFriendNames.clear();
 
         Map<String, String> parameterBody = new HashMap<>();
         parameterBody.put("username", username);
@@ -218,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
 
         mFriendUsernames = new ArrayList<>();
         mFriendIsPending = new ArrayList<>();
+        mFriendNames = new ArrayList<>();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

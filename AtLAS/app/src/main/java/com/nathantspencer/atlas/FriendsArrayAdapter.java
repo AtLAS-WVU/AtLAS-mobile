@@ -1,7 +1,6 @@
 package com.nathantspencer.atlas;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +20,7 @@ public class FriendsArrayAdapter extends BaseAdapter implements ListAdapter
 {
     private ArrayList<String> mUsernames = new ArrayList<>();
     private ArrayList<Boolean> mIsPending = new ArrayList<>();
+    private ArrayList<String> mNames = new ArrayList<>();
     private Context mContext;
 
     private class ConfirmFriendRequestResponder implements RequestResponder
@@ -60,10 +60,11 @@ public class FriendsArrayAdapter extends BaseAdapter implements ListAdapter
     }
 
 
-    public FriendsArrayAdapter(ArrayList<String> list, ArrayList<Boolean> isPendingList, Context context)
+    public FriendsArrayAdapter(ArrayList<String> list, ArrayList<Boolean> isPendingList, ArrayList<String> names, Context context)
     {
         this.mUsernames = list;
         this.mIsPending = isPendingList;
+        this.mNames = names;
         this.mContext = context;
     }
 
@@ -79,25 +80,10 @@ public class FriendsArrayAdapter extends BaseAdapter implements ListAdapter
         return mUsernames.get(pos);
     }
 
-    public Object getUsername(int pos)
-    {
-        return mUsernames.get(pos);
-    }
-
     @Override
     public long getItemId(int pos)
     {
         return pos;
-    }
-
-    public ArrayList<Boolean> getIsPendingList()
-    {
-        return mIsPending;
-    }
-
-    public ArrayList<String> getUsernamesList()
-    {
-        return mUsernames;
     }
 
     @Override
@@ -111,6 +97,9 @@ public class FriendsArrayAdapter extends BaseAdapter implements ListAdapter
 
         TextView listItemText = view.findViewById(R.id.list_item_string);
         listItemText.setText(mUsernames.get(position));
+
+        TextView name = view.findViewById(R.id.name);
+        name.setText(mNames.get(position));
 
         Button denyButton = view.findViewById(R.id.deny_friend);
         Button confirmButton = view.findViewById(R.id.confirm_friend);
