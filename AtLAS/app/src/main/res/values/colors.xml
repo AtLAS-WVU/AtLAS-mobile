@@ -9,4 +9,8 @@
     <color name="offWhite">#876db0</color>
 
     <color name="translucentColorPrimaryDark">#85303f9f</color>
+
+    <color name="positive">#007700</color>
+    <color name="negative">#770000</color>
+
 </resources>

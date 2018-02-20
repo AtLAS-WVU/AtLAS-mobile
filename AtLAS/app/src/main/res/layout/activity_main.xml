@@ -66,14 +66,6 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <Button
-            android:id="@+id/add_friend_button"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="Add Friends" />
-
         <com.google.android.gms.maps.MapView
             android:id="@+id/map_view"
             android:layout_width="match_parent"
@@ -84,7 +76,20 @@
             android:id="@+id/friend_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="75dp" />
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="70dp" />
+
+        <Button
+            android:id="@+id/add_friend_button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="63dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Add Friends" />
 
     </FrameLayout>
 

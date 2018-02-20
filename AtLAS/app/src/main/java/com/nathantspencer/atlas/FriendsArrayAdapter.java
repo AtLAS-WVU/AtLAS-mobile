@@ -1,6 +1,7 @@
 package com.nathantspencer.atlas;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ public class FriendsArrayAdapter extends BaseAdapter implements ListAdapter
 
         public void onResponse(String response)
         {
+            ((MainActivity) mContext).RefreshFriends();
         }
     }
 
@@ -41,6 +43,19 @@ public class FriendsArrayAdapter extends BaseAdapter implements ListAdapter
 
         public void onResponse(String response)
         {
+            ((MainActivity) mContext).RefreshFriends();
+        }
+    }
+
+    private class DeleteFriendRequestResponder implements RequestResponder
+    {
+        DeleteFriendRequestResponder()
+        {
+        }
+
+        public void onResponse(String response)
+        {
+            ((MainActivity) mContext).RefreshFriends();
         }
     }
 
@@ -140,6 +155,22 @@ public class FriendsArrayAdapter extends BaseAdapter implements ListAdapter
                 parameterBody.put("friend_username", mUsernames.get(position));
                 parameterBody.put("token", atlasLoginKey);
                 mGeneralRequest.POSTRequest("ConfirmFriend.php", parameterBody, new ConfirmFriendRequestResponder());
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                SharedPreferences sharedPref = mContext.getSharedPreferences("AUTH", Context.MODE_PRIVATE);
+                final String username = sharedPref.getString("atlasUsername", "");
+                final String atlasLoginKey = sharedPref.getString("atlasLoginKey", "");
+
+                Map<String, String> parameterBody = new HashMap<>();
+                parameterBody.put("username", username);
+                parameterBody.put("friend_username", mUsernames.get(position));
+                parameterBody.put("token", atlasLoginKey);
+                mGeneralRequest.POSTRequest("DeleteFriend.php", parameterBody, new DeleteFriendRequestResponder());
             }
         });
 

@@ -188,6 +188,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    protected void RefreshFriends()
+    {
+        SharedPreferences sharedPref = MainActivity.this.getSharedPreferences("AUTH", Context.MODE_PRIVATE);
+        final String username = sharedPref.getString("atlasUsername", "");
+        final String atlasLoginKey = sharedPref.getString("atlasLoginKey", "");
+
+        mFriendIsPending.clear();
+        mFriendUsernames.clear();
+
+        Map<String, String> parameterBody = new HashMap<>();
+        parameterBody.put("username", username);
+        parameterBody.put("token", atlasLoginKey);
+        mGeneralRequest.GETRequest("PendingFriends.php", parameterBody, new PendingListRequestResponder());
+        mGeneralRequest.GETRequest("FriendsList.php", parameterBody, new FriendsListRequestResponder());
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
