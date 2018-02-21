@@ -104,6 +104,7 @@ public class FriendsArrayAdapter extends BaseAdapter implements ListAdapter
         Button denyButton = view.findViewById(R.id.deny_friend);
         Button confirmButton = view.findViewById(R.id.confirm_friend);
         Button deleteButton = view.findViewById(R.id.delete_friend);
+        Button sendButton = view.findViewById(R.id.send_friend);
 
         if (!mIsPending.get(position))
         {
@@ -113,6 +114,7 @@ public class FriendsArrayAdapter extends BaseAdapter implements ListAdapter
         else
         {
             deleteButton.setVisibility(View.GONE);
+            sendButton.setVisibility(View.GONE);
         }
 
         denyButton.setOnClickListener(new View.OnClickListener() {

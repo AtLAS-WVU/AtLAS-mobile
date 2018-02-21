@@ -91,4 +91,16 @@
         android:text="ADD"
         android:theme="@style/PositiveButtonTheme" />
 
+    <Button
+        android:id="@+id/send_friend"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_toLeftOf="@+id/delete_friend"
+        android:layout_toStartOf="@+id/delete_friend"
+        android:text="SEND" />
+
 </RelativeLayout>
