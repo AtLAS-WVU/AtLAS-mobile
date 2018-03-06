@@ -1,8 +1,12 @@
 package com.nathantspencer.atlas;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -13,6 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,9 +33,12 @@ import static com.nathantspencer.atlas.LoginActivity.mGeneralRequest;
 
 public class MainActivity extends AppCompatActivity {
 
+    private LocationManager mLocationManager;
+    private GoogleMap mMap;
+
     private FloatingActionButton mSignOutButton;
     private View mAddFriendButton;
-    private View mMapView;
+    private MapFragment mMapFragment;
     private ListView mFriendsList;
 
     private ArrayList<String> mFriendUsernames;
@@ -43,8 +53,11 @@ public class MainActivity extends AppCompatActivity {
 
             // clear all elements before displaying those which are relevant
             mAddFriendButton.setVisibility(View.GONE);
-            mMapView.setVisibility(View.GONE);
             mFriendsList.setVisibility(View.GONE);
+
+            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.hide(mMapFragment);
+            fragmentTransaction.commit();
 
             switch (item.getItemId()) {
 
@@ -52,7 +65,13 @@ public class MainActivity extends AppCompatActivity {
                     return true;
 
                 case R.id.navigation_map:
-                    mMapView.setVisibility(View.VISIBLE);
+                    fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.show(mMapFragment);
+                    fragmentTransaction.commit();
+
+                    Criteria criteria = new Criteria();
+                    criteria.setAccuracy(Criteria.ACCURACY_FINE);
+
                     return true;
 
                 case R.id.navigation_send:
@@ -110,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         public void onResponse(String response)
         {
             // grab value of response field "success"
-            Boolean success = false;
+            Boolean success;
             try
             {
                 JSONObject jsonResponse = new JSONObject(response);
@@ -214,12 +233,16 @@ public class MainActivity extends AppCompatActivity {
 
         mSignOutButton = (FloatingActionButton) findViewById(R.id.signOutButton);
         mAddFriendButton = findViewById(R.id.add_friend_button);
-        mMapView = findViewById(R.id.map_view);
+        mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_view);
         mFriendsList = (ListView) findViewById(R.id.friend_list);
 
         mFriendUsernames = new ArrayList<>();
         mFriendIsPending = new ArrayList<>();
         mFriendNames = new ArrayList<>();
+
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.hide(mMapFragment);
+        fragmentTransaction.commit();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
