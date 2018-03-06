@@ -1,6 +1,8 @@
 package com.nathantspencer.atlas;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -153,15 +155,25 @@ public class FriendsArrayAdapter extends BaseAdapter implements ListAdapter
             @Override
             public void onClick(View v)
             {
-                SharedPreferences sharedPref = mContext.getSharedPreferences("AUTH", Context.MODE_PRIVATE);
-                final String username = sharedPref.getString("atlasUsername", "");
-                final String atlasLoginKey = sharedPref.getString("atlasLoginKey", "");
+                new AlertDialog.Builder(mContext)
+                        .setTitle("Delete Friend")
+                        .setMessage("Are you sure you want to remove " + mUsernames.get(position) + " as a friend?")
+                        .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                SharedPreferences sharedPref = mContext.getSharedPreferences("AUTH", Context.MODE_PRIVATE);
+                                final String username = sharedPref.getString("atlasUsername", "");
+                                final String atlasLoginKey = sharedPref.getString("atlasLoginKey", "");
 
-                Map<String, String> parameterBody = new HashMap<>();
-                parameterBody.put("username", username);
-                parameterBody.put("friend_username", mUsernames.get(position));
-                parameterBody.put("token", atlasLoginKey);
-                mGeneralRequest.POSTRequest("DeleteFriend.php", parameterBody, new DeleteFriendRequestResponder());
+                                Map<String, String> parameterBody = new HashMap<>();
+                                parameterBody.put("username", username);
+                                parameterBody.put("friend_username", mUsernames.get(position));
+                                parameterBody.put("token", atlasLoginKey);
+                                mGeneralRequest.POSTRequest("DeleteFriend.php", parameterBody, new DeleteFriendRequestResponder());
+                             }
+                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        }).show();
             }
         });
 
