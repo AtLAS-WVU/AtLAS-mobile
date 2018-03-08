@@ -46,4 +46,8 @@
         <item name="colorAccent">@color/negative</item>
     </style>
 
+    <style name="NullButtonTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorAccent">@color/gray</item>
+    </style>
+
 </resources>
