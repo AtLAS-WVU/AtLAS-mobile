@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private View mAddFriendButton;
     private MapFragment mMapFragment;
     private ListView mFriendsList;
+    private ListView mDeliveriesList;
 
     private ArrayList<String> mFriendUsernames;
     private ArrayList<Boolean> mFriendIsPending;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
             // clear all elements before displaying those which are relevant
             mAddFriendButton.setVisibility(View.GONE);
             mFriendsList.setVisibility(View.GONE);
+            mDeliveriesList.setVisibility(View.GONE);
 
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.hide(mMapFragment);
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
 
                 case R.id.navigation_history:
+                    mDeliveriesList.setVisibility(View.VISIBLE);
                     return true;
 
                 case R.id.navigation_map:
@@ -235,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
         mAddFriendButton = findViewById(R.id.add_friend_button);
         mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_view);
         mFriendsList = (ListView) findViewById(R.id.friend_list);
+        mDeliveriesList =  (ListView) findViewById(R.id.delivery_list);
 
         mFriendUsernames = new ArrayList<>();
         mFriendIsPending = new ArrayList<>();
