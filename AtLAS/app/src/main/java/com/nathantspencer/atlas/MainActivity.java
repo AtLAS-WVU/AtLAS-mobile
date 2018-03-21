@@ -227,6 +227,10 @@ public class MainActivity extends AppCompatActivity {
         mGeneralRequest.GETRequest("FriendsList.php", parameterBody, new FriendsListRequestResponder());
     }
 
+    protected void RefreshDeliveries()
+    {
+        // TODO: repeat calls to get pending/active deliviries, repopulate list
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

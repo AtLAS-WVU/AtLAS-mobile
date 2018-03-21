@@ -23,62 +23,40 @@ public class DeliveriesArrayAdapter extends BaseAdapter implements ListAdapter
     private ArrayList<String> mUsernames = new ArrayList<>();
     private ArrayList<Boolean> mIsPending = new ArrayList<>();
     private ArrayList<String> mNames = new ArrayList<>();
+    private ArrayList<String> mDescriptions = new ArrayList<>();
     private Context mContext;
 
-    private class ConfirmFriendRequestResponder implements RequestResponder
+    private class AcceptDeliveryRequestResponder implements RequestResponder
     {
-        ConfirmFriendRequestResponder()
+        AcceptDeliveryRequestResponder()
         {
         }
 
         public void onResponse(String response)
         {
-            ((MainActivity) mContext).RefreshFriends();
+            ((MainActivity) mContext).RefreshDeliveries();
         }
     }
 
-    private class DenyFriendRequestResponder implements RequestResponder
+    private class RejectDeliveryRequestResponder implements RequestResponder
     {
-        DenyFriendRequestResponder()
+        RejectDeliveryRequestResponder()
         {
         }
 
         public void onResponse(String response)
         {
-            ((MainActivity) mContext).RefreshFriends();
-        }
-    }
-
-    private class DeleteFriendRequestResponder implements RequestResponder
-    {
-        DeleteFriendRequestResponder()
-        {
-        }
-
-        public void onResponse(String response)
-        {
-            ((MainActivity) mContext).RefreshFriends();
-        }
-    }
-
-    private class RequestToSendRequestResponder implements RequestResponder
-    {
-        RequestToSendRequestResponder()
-        {
-        }
-
-        public void onResponse(String response)
-        {
+            ((MainActivity) mContext).RefreshDeliveries();
         }
     }
 
 
-
-    public DeliveriesArrayAdapter(ArrayList<String> list, ArrayList<Boolean> isPendingList, ArrayList<String> names, Context context)
+    public DeliveriesArrayAdapter(ArrayList<String> list, ArrayList<Boolean> isPendingList, ArrayList<String> names, ArrayList<String> descriptions, Context context)
     {
         this.mUsernames = list;
         this.mIsPending = isPendingList;
         this.mNames = names;
+        this.mDescriptions = descriptions;
         this.mContext = context;
     }
 
@@ -106,30 +84,25 @@ public class DeliveriesArrayAdapter extends BaseAdapter implements ListAdapter
         View view = convertView;
         if (view == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.friend, null);
+            view = inflater.inflate(R.layout.request, null);
         }
 
         TextView listItemText = view.findViewById(R.id.list_item_string);
         listItemText.setText(mUsernames.get(position));
 
-        TextView name = view.findViewById(R.id.name);
+        TextView name = view.findViewById(R.id.description);
         name.setText(mNames.get(position));
 
-        Button denyButton = view.findViewById(R.id.deny_friend);
-        Button confirmButton = view.findViewById(R.id.confirm_friend);
-        Button deleteButton = view.findViewById(R.id.delete_friend);
+        Button acceptButton = view.findViewById(R.id.accept_delivery);
+        Button rejectButton = view.findViewById(R.id.reject_delivery);
 
         if (!mIsPending.get(position))
         {
-            denyButton.setVisibility(View.GONE);
-            confirmButton.setVisibility(View.GONE);
-        }
-        else
-        {
-            deleteButton.setVisibility(View.GONE);
+            acceptButton.setVisibility(View.GONE);
+            rejectButton.setVisibility(View.GONE);
         }
 
-        denyButton.setOnClickListener(new View.OnClickListener() {
+        rejectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
@@ -141,11 +114,11 @@ public class DeliveriesArrayAdapter extends BaseAdapter implements ListAdapter
                 parameterBody.put("username", username);
                 parameterBody.put("friend_username", mUsernames.get(position));
                 parameterBody.put("token", atlasLoginKey);
-                mGeneralRequest.POSTRequest("DenyFriend.php", parameterBody, new DenyFriendRequestResponder());
+               // mGeneralRequest.POSTRequest("DenyFriend.php", parameterBody, new DenyFriendRequestResponder());
             }
         });
 
-        confirmButton.setOnClickListener(new View.OnClickListener() {
+        acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
@@ -157,33 +130,7 @@ public class DeliveriesArrayAdapter extends BaseAdapter implements ListAdapter
                 parameterBody.put("username", username);
                 parameterBody.put("friend_username", mUsernames.get(position));
                 parameterBody.put("token", atlasLoginKey);
-                mGeneralRequest.POSTRequest("ConfirmFriend.php", parameterBody, new ConfirmFriendRequestResponder());
-            }
-        });
-
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                new AlertDialog.Builder(mContext)
-                        .setTitle("Delete Friend")
-                        .setMessage("Are you sure you want to remove " + mUsernames.get(position) + " as a friend?")
-                        .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                SharedPreferences sharedPref = mContext.getSharedPreferences("AUTH", Context.MODE_PRIVATE);
-                                final String username = sharedPref.getString("atlasUsername", "");
-                                final String atlasLoginKey = sharedPref.getString("atlasLoginKey", "");
-
-                                Map<String, String> parameterBody = new HashMap<>();
-                                parameterBody.put("username", username);
-                                parameterBody.put("friend_username", mUsernames.get(position));
-                                parameterBody.put("token", atlasLoginKey);
-                                mGeneralRequest.POSTRequest("DeleteFriend.php", parameterBody, new DeleteFriendRequestResponder());
-                             }
-                        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        }).show();
+               // mGeneralRequest.POSTRequest("ConfirmFriend.php", parameterBody, new ConfirmFriendRequestResponder());
             }
         });
 

@@ -39,7 +39,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/list_item_string"
@@ -52,7 +52,7 @@
         android:textSize="10sp" />
 
     <Button
-        android:id="@+id/deny_friend"
+        android:id="@+id/reject_delivery"
         style="@style/Widget.AppCompat.Button.Colored"
 
         android:layout_width="wrap_content"
@@ -86,8 +86,8 @@
         android:layout_centerVertical="true"
         android:layout_marginBottom="5dp"
         android:layout_marginStart="5dp"
-        android:layout_toLeftOf="@+id/deny_friend"
-        android:layout_toStartOf="@+id/deny_friend"
+        android:layout_toLeftOf="@+id/reject_delivery"
+        android:layout_toStartOf="@+id/reject_delivery"
         android:text="ADD"
         android:theme="@style/PositiveButtonTheme" />
 
