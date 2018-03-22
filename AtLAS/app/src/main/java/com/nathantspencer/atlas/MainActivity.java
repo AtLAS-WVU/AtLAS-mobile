@@ -96,9 +96,9 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
-    private class GetDeliveriesRequestResponder implements RequestResponder {
+    private class PendingDeliveriesRequestResponder implements RequestResponder {
 
-        GetDeliveriesRequestResponder()
+        PendingDeliveriesRequestResponder()
         {
         }
 
@@ -111,21 +111,16 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject jsonResponse = new JSONObject(response);
                 success = jsonResponse.getBoolean("success");
 
-                if(jsonResponse.getString("debug").equals("No pending requests found"))
-                {
-                    success = false;
-                }
-
                 if(success)
                 {
                     JSONArray requests = jsonResponse.getJSONArray("pending_requests");
                     for (int i = 0; i < requests.length(); i++)
                     {
                         JSONObject request = requests.getJSONObject(i);
-                        mDeliveryUsernames.add(request.get("receiver_username").toString());
-                        mDeliveryStatuses.add(request.get("delivery_status").toString());
+                        mDeliveryUsernames.add(request.get("receiverUserName").toString());
+                        mDeliveryStatuses.add(request.get("requestDate").toString());
                         mDeliveryDescriptions.add(request.get("delivery_message").toString());
-                        mDeliveryIsPending.add(!request.getBoolean("waiting_for_us"));
+                        mDeliveryIsPending.add(request.getBoolean("can_we_approve"));
                     }
                 }
 
@@ -292,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
         Map<String, String> parameterBody = new HashMap<>();
         parameterBody.put("username", username);
         parameterBody.put("token", atlasLoginKey);
-        mGeneralRequest.GETRequest("GetDeliveries.php", parameterBody, new PendingListRequestResponder());
+        mGeneralRequest.GETRequest("PendingRequests.php", parameterBody, new PendingDeliveriesRequestResponder());
     }
 
     @Override
@@ -337,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
 
         mGeneralRequest.GETRequest("PendingFriends.php", parameterBody, new PendingListRequestResponder());
         mGeneralRequest.GETRequest("FriendsList.php", parameterBody, new FriendsListRequestResponder());
-        mGeneralRequest.GETRequest("GetDeliveries.php", parameterBody, new GetDeliveriesRequestResponder());
+        mGeneralRequest.GETRequest("PendingRequests.php", parameterBody, new PendingDeliveriesRequestResponder());
 
         mSignOutButton.setOnClickListener(new View.OnClickListener() {
             @Override

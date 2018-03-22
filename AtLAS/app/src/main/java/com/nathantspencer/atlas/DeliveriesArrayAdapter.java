@@ -85,11 +85,11 @@ public class DeliveriesArrayAdapter extends BaseAdapter implements ListAdapter
         TextView listItemText = view.findViewById(R.id.list_item_string);
         listItemText.setText(mUsernames.get(position));
 
-        TextView status = view.findViewById(R.id.status);
-        status.setText(mStatuses.get(position));
-
         TextView description = view.findViewById(R.id.description);
-        description.setText(mDescriptions.get(position));
+        description.setText(mStatuses.get(position));
+
+        TextView message = view.findViewById(R.id.message);
+        message.setText(mDescriptions.get(position));
 
         Button acceptButton = view.findViewById(R.id.accept_delivery);
         Button rejectButton = view.findViewById(R.id.reject_delivery);
