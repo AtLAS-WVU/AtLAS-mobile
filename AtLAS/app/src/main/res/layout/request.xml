@@ -39,7 +39,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/description"
+        android:id="@+id/status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/description"
@@ -48,7 +48,7 @@
         android:paddingBottom="2dp"
         android:paddingLeft="12dp"
         android:paddingTop="0dp"
-        android:text="Description"
+        android:text="Status"
         android:textSize="10sp" />
 
     <TextView
@@ -61,7 +61,7 @@
         android:paddingBottom="2dp"
         android:paddingLeft="12dp"
         android:paddingTop="0dp"
-        android:text="First Last"
+        android:text="Description"
         android:textSize="10sp" />
 
     <Button

@@ -1,8 +1,6 @@
 package com.nathantspencer.atlas;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,13 +14,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.nathantspencer.atlas.LoginActivity.mGeneralRequest;
-
 public class DeliveriesArrayAdapter extends BaseAdapter implements ListAdapter
 {
     private ArrayList<String> mUsernames = new ArrayList<>();
     private ArrayList<Boolean> mIsPending = new ArrayList<>();
-    private ArrayList<String> mNames = new ArrayList<>();
+    private ArrayList<String> mStatuses = new ArrayList<>();
     private ArrayList<String> mDescriptions = new ArrayList<>();
     private Context mContext;
 
@@ -50,12 +46,11 @@ public class DeliveriesArrayAdapter extends BaseAdapter implements ListAdapter
         }
     }
 
-
-    public DeliveriesArrayAdapter(ArrayList<String> list, ArrayList<Boolean> isPendingList, ArrayList<String> names, ArrayList<String> descriptions, Context context)
+    public DeliveriesArrayAdapter(ArrayList<String> list, ArrayList<Boolean> isPendingList, ArrayList<String> statuses, ArrayList<String> descriptions, Context context)
     {
         this.mUsernames = list;
         this.mIsPending = isPendingList;
-        this.mNames = names;
+        this.mStatuses = statuses;
         this.mDescriptions = descriptions;
         this.mContext = context;
     }
@@ -90,8 +85,11 @@ public class DeliveriesArrayAdapter extends BaseAdapter implements ListAdapter
         TextView listItemText = view.findViewById(R.id.list_item_string);
         listItemText.setText(mUsernames.get(position));
 
-        TextView name = view.findViewById(R.id.description);
-        name.setText(mNames.get(position));
+        TextView status = view.findViewById(R.id.status);
+        status.setText(mStatuses.get(position));
+
+        TextView description = view.findViewById(R.id.description);
+        description.setText(mDescriptions.get(position));
 
         Button acceptButton = view.findViewById(R.id.accept_delivery);
         Button rejectButton = view.findViewById(R.id.reject_delivery);

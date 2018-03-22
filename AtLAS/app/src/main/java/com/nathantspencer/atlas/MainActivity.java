@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Criteria;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -38,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FloatingActionButton mSignOutButton;
     private View mAddFriendButton;
+    private TextView mPendingDeliveriesText;
     private MapFragment mMapFragment;
     private ListView mFriendsList;
     private ListView mDeliveriesList;
@@ -45,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mFriendUsernames;
     private ArrayList<Boolean> mFriendIsPending;
     private ArrayList<String> mFriendNames;
+
+    private ArrayList<String> mDeliveryUsernames;
+    private ArrayList<Boolean> mDeliveryIsPending;
+    private ArrayList<String> mDeliveryStatuses;
+    private ArrayList<String> mDeliveryDescriptions;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -56,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
             mAddFriendButton.setVisibility(View.GONE);
             mFriendsList.setVisibility(View.GONE);
             mDeliveriesList.setVisibility(View.GONE);
+            mPendingDeliveriesText.setVisibility(View.GONE);
 
             FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.hide(mMapFragment);
@@ -65,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.navigation_history:
                     mDeliveriesList.setVisibility(View.VISIBLE);
+                    mPendingDeliveriesText.setVisibility(View.VISIBLE);
                     return true;
 
                 case R.id.navigation_map:
@@ -89,6 +96,51 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
+    private class GetDeliveriesRequestResponder implements RequestResponder {
+
+        GetDeliveriesRequestResponder()
+        {
+        }
+
+        public void onResponse(String response)
+        {
+            // grab value of response field "success"
+            Boolean success;
+            try
+            {
+                JSONObject jsonResponse = new JSONObject(response);
+                success = jsonResponse.getBoolean("success");
+
+                if(jsonResponse.getString("debug").equals("No pending requests found"))
+                {
+                    success = false;
+                }
+
+                if(success)
+                {
+                    JSONArray requests = jsonResponse.getJSONArray("pending_requests");
+                    for (int i = 0; i < requests.length(); i++)
+                    {
+                        JSONObject request = requests.getJSONObject(i);
+                        mDeliveryUsernames.add(request.get("receiver_username").toString());
+                        mDeliveryStatuses.add(request.get("delivery_status").toString());
+                        mDeliveryDescriptions.add(request.get("delivery_message").toString());
+                        mDeliveryIsPending.add(!request.getBoolean("waiting_for_us"));
+                    }
+                }
+
+                final DeliveriesArrayAdapter arrayAdapter = new DeliveriesArrayAdapter
+                        (mDeliveryUsernames, mDeliveryIsPending, mDeliveryStatuses, mDeliveryDescriptions, MainActivity.this);
+
+                mDeliveriesList.setAdapter(arrayAdapter);
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private class PendingListRequestResponder implements RequestResponder {
 
         PendingListRequestResponder()
@@ -98,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         public void onResponse(String response)
         {
             // grab value of response field "success"
-            Boolean success = false;
+            Boolean success;
             try
             {
                 JSONObject jsonResponse = new JSONObject(response);
@@ -229,7 +281,18 @@ public class MainActivity extends AppCompatActivity {
 
     protected void RefreshDeliveries()
     {
-        // TODO: repeat calls to get pending/active deliviries, repopulate list
+        SharedPreferences sharedPref = MainActivity.this.getSharedPreferences("AUTH", Context.MODE_PRIVATE);
+        final String username = sharedPref.getString("atlasUsername", "");
+        final String atlasLoginKey = sharedPref.getString("atlasLoginKey", "");
+
+        mFriendIsPending.clear();
+        mFriendUsernames.clear();
+        mFriendNames.clear();
+
+        Map<String, String> parameterBody = new HashMap<>();
+        parameterBody.put("username", username);
+        parameterBody.put("token", atlasLoginKey);
+        mGeneralRequest.GETRequest("GetDeliveries.php", parameterBody, new PendingListRequestResponder());
     }
 
     @Override
@@ -243,10 +306,16 @@ public class MainActivity extends AppCompatActivity {
         mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_view);
         mFriendsList = (ListView) findViewById(R.id.friend_list);
         mDeliveriesList =  (ListView) findViewById(R.id.delivery_list);
+        mPendingDeliveriesText = (TextView) findViewById(R.id.pending_deliveries_text);
 
         mFriendUsernames = new ArrayList<>();
         mFriendIsPending = new ArrayList<>();
         mFriendNames = new ArrayList<>();
+
+        mDeliveryUsernames = new ArrayList<>();
+        mDeliveryIsPending = new ArrayList<>();
+        mDeliveryStatuses = new ArrayList<>();
+        mDeliveryDescriptions = new ArrayList<>();
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.hide(mMapFragment);
@@ -265,8 +334,10 @@ public class MainActivity extends AppCompatActivity {
         Map<String, String> parameterBody = new HashMap<>();
         parameterBody.put("username", username);
         parameterBody.put("token", atlasLoginKey);
+
         mGeneralRequest.GETRequest("PendingFriends.php", parameterBody, new PendingListRequestResponder());
         mGeneralRequest.GETRequest("FriendsList.php", parameterBody, new FriendsListRequestResponder());
+        mGeneralRequest.GETRequest("GetDeliveries.php", parameterBody, new GetDeliveriesRequestResponder());
 
         mSignOutButton.setOnClickListener(new View.OnClickListener() {
             @Override

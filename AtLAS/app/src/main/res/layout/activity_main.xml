@@ -98,6 +98,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <TextView
+            android:id="@+id/pending_deliveries_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="28dp"
+            android:lineSpacingExtra="2sp"
+            android:text="PENDING DELIVERIES"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
     </FrameLayout>
 
     <android.support.design.widget.BottomNavigationView

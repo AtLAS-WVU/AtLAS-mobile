@@ -116,7 +116,7 @@ public class FriendsArrayAdapter extends BaseAdapter implements ListAdapter
         TextView listItemText = view.findViewById(R.id.list_item_string);
         listItemText.setText(mUsernames.get(position));
 
-        TextView name = view.findViewById(R.id.description);
+        TextView name = view.findViewById(R.id.status);
         name.setText(mNames.get(position));
 
         Button denyButton = view.findViewById(R.id.reject_delivery);
