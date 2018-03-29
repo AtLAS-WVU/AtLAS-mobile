@@ -4,12 +4,16 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Criteria;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -17,8 +21,11 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
     private LocationManager mLocationManager;
     private GoogleMap mMap;
+    private FusedLocationProviderClient mFusedLocationClient;
+    private Context mContext;
 
     private FloatingActionButton mSignOutButton;
     private View mAddFriendButton;
@@ -316,6 +325,8 @@ public class MainActivity extends AppCompatActivity {
         mFriendIsPending = new ArrayList<>();
         mFriendNames = new ArrayList<>();
 
+        mContext = this;
+
         mDeliveryUsernames = new ArrayList<>();
         mDeliveryIsPending = new ArrayList<>();
         mDeliveryStatuses = new ArrayList<>();
@@ -329,7 +340,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run()
             {
-                System.out.println("Send user location here...");
+                if (ContextCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+                {
+                    mFusedLocationClient.getLastLocation()
+                        .addOnSuccessListener(new OnSuccessListener<Location>()
+                        {
+                            @Override
+                            public void onSuccess(Location location)
+                            {
+                                if(location != null)
+                                {
+                                    System.out.println("sending location...");
+                                }
+                            }
+                        });
+
+                }
+
             }
         }, 0, 5000);
 
@@ -346,6 +373,8 @@ public class MainActivity extends AppCompatActivity {
         final String atlasLoginKey = sharedPref.getString("atlasLoginKey", "");
         TextView usernameTextView = (TextView) findViewById(R.id.usernameTextView);
         usernameTextView.setText(username);
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         Map<String, String> parameterBody = new HashMap<>();
         parameterBody.put("username", username);
