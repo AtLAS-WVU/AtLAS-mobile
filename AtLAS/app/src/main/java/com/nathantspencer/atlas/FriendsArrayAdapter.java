@@ -216,7 +216,7 @@ public class FriendsArrayAdapter extends BaseAdapter implements ListAdapter
                     parameterBody.put("username", username);
                     parameterBody.put("friend_username", mUsernames.get(position));
                     parameterBody.put("token", atlasLoginKey);
-                    parameterBody.put("delivery_message", "New delivery request from " + username + ".");
+                    parameterBody.put("delivery_message", sendMessage.getText().toString());
                     mGeneralRequest.POSTRequest("RequestToSend.php", parameterBody, new RequestToSendRequestResponder());
                 }
                 });
