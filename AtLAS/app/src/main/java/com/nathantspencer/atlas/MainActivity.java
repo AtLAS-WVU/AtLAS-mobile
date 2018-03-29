@@ -148,6 +148,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private class UpdateUserLocationRequestResponder implements RequestResponder {
+
+        UpdateUserLocationRequestResponder()
+        {
+        }
+
+        public void onResponse(String response)
+        {
+        }
+    }
+
     private class PendingListRequestResponder implements RequestResponder {
 
         PendingListRequestResponder()
@@ -351,7 +362,16 @@ public class MainActivity extends AppCompatActivity {
                             {
                                 if(location != null)
                                 {
-                                    System.out.println("sending location...");
+                                    SharedPreferences sharedPref = MainActivity.this.getSharedPreferences("AUTH", Context.MODE_PRIVATE);
+                                    final String username = sharedPref.getString("atlasUsername", "");
+                                    final String atlasLoginKey = sharedPref.getString("atlasLoginKey", "");
+
+                                    Map<String, String> parameterBody = new HashMap<>();
+                                    parameterBody.put("username", username);
+                                    parameterBody.put("token", atlasLoginKey);
+                                    parameterBody.put("longitude", Double.toString(location.getLongitude()));
+                                    parameterBody.put("latitude", Double.toString(location.getLatitude()));
+                                    mGeneralRequest.POSTRequest("UpdateUserLocation.php", parameterBody, new UpdateUserLocationRequestResponder());
                                 }
                             }
                         });
