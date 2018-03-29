@@ -326,6 +326,7 @@ public class MainActivity extends AppCompatActivity {
         mFriendNames = new ArrayList<>();
 
         mContext = this;
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         mDeliveryUsernames = new ArrayList<>();
         mDeliveryIsPending = new ArrayList<>();
@@ -355,6 +356,10 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
 
+                }
+                else
+                {
+                    ActivityCompat.requestPermissions((MainActivity) mContext, new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION }, 1);
                 }
 
             }
