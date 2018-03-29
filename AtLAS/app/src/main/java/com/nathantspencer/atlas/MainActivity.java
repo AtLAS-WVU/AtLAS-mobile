@@ -308,6 +308,10 @@ public class MainActivity extends AppCompatActivity {
         mDeliveriesList =  (ListView) findViewById(R.id.delivery_list);
         mPendingDeliveriesText = (TextView) findViewById(R.id.pending_deliveries_text);
 
+        // unclear why this is necessary, as the layout should impose this already
+        mDeliveriesList.setVisibility(View.GONE);
+        mPendingDeliveriesText.setVisibility(View.GONE);
+
         mFriendUsernames = new ArrayList<>();
         mFriendIsPending = new ArrayList<>();
         mFriendNames = new ArrayList<>();
