@@ -27,6 +27,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.nathantspencer.atlas.LoginActivity.mGeneralRequest;
 
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Boolean> mDeliveryIsPending;
     private ArrayList<String> mDeliveryStatuses;
     private ArrayList<String> mDeliveryDescriptions;
+    private ArrayList<String> mDeliveryRequestNumber;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -81,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
 
                     Criteria criteria = new Criteria();
                     criteria.setAccuracy(Criteria.ACCURACY_FINE);
-
                     return true;
 
                 case R.id.navigation_send:
@@ -117,15 +119,16 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0; i < requests.length(); i++)
                     {
                         JSONObject request = requests.getJSONObject(i);
-                        mDeliveryUsernames.add(request.get("receiverUserName").toString());
-                        mDeliveryStatuses.add(request.get("requestDate").toString());
+                        mDeliveryUsernames.add(request.get("receiver_username").toString());
+                        mDeliveryStatuses.add(request.get("request_date").toString());
                         mDeliveryDescriptions.add(request.get("delivery_message").toString());
                         mDeliveryIsPending.add(request.getBoolean("can_we_approve"));
+                        mDeliveryRequestNumber.add(request.get("requestID").toString());
                     }
                 }
 
                 final DeliveriesArrayAdapter arrayAdapter = new DeliveriesArrayAdapter
-                        (mDeliveryUsernames, mDeliveryIsPending, mDeliveryStatuses, mDeliveryDescriptions, MainActivity.this);
+                        (mDeliveryUsernames, mDeliveryIsPending, mDeliveryStatuses, mDeliveryDescriptions, mDeliveryRequestNumber, MainActivity.this);
 
                 mDeliveriesList.setAdapter(arrayAdapter);
             }
@@ -280,9 +283,11 @@ public class MainActivity extends AppCompatActivity {
         final String username = sharedPref.getString("atlasUsername", "");
         final String atlasLoginKey = sharedPref.getString("atlasLoginKey", "");
 
-        mFriendIsPending.clear();
-        mFriendUsernames.clear();
-        mFriendNames.clear();
+        mDeliveryUsernames.clear();
+        mDeliveryIsPending.clear();
+        mDeliveryStatuses.clear();
+        mDeliveryDescriptions.clear();
+        mDeliveryRequestNumber.clear();
 
         Map<String, String> parameterBody = new HashMap<>();
         parameterBody.put("username", username);
@@ -311,6 +316,18 @@ public class MainActivity extends AppCompatActivity {
         mDeliveryIsPending = new ArrayList<>();
         mDeliveryStatuses = new ArrayList<>();
         mDeliveryDescriptions = new ArrayList<>();
+        mDeliveryRequestNumber = new ArrayList<>();
+
+        Timer myTimer = new Timer();
+        myTimer.schedule(new TimerTask() {
+
+            // updates user location every 5 seconds
+            @Override
+            public void run()
+            {
+                System.out.println("Send user location here...");
+            }
+        }, 0, 5000);
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.hide(mMapFragment);

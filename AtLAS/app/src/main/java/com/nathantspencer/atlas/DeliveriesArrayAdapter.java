@@ -14,12 +14,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.nathantspencer.atlas.LoginActivity.mGeneralRequest;
+
 public class DeliveriesArrayAdapter extends BaseAdapter implements ListAdapter
 {
     private ArrayList<String> mUsernames = new ArrayList<>();
     private ArrayList<Boolean> mIsPending = new ArrayList<>();
     private ArrayList<String> mStatuses = new ArrayList<>();
     private ArrayList<String> mDescriptions = new ArrayList<>();
+    private ArrayList<String> mRequestNumbers = new ArrayList<>();
     private Context mContext;
 
     private class AcceptDeliveryRequestResponder implements RequestResponder
@@ -46,12 +49,13 @@ public class DeliveriesArrayAdapter extends BaseAdapter implements ListAdapter
         }
     }
 
-    public DeliveriesArrayAdapter(ArrayList<String> list, ArrayList<Boolean> isPendingList, ArrayList<String> statuses, ArrayList<String> descriptions, Context context)
+    public DeliveriesArrayAdapter(ArrayList<String> list, ArrayList<Boolean> isPendingList, ArrayList<String> statuses, ArrayList<String> descriptions, ArrayList<String> requestNumbers, Context context)
     {
         this.mUsernames = list;
         this.mIsPending = isPendingList;
         this.mStatuses = statuses;
         this.mDescriptions = descriptions;
+        this.mRequestNumbers = requestNumbers;
         this.mContext = context;
     }
 
@@ -110,9 +114,9 @@ public class DeliveriesArrayAdapter extends BaseAdapter implements ListAdapter
 
                 Map<String, String> parameterBody = new HashMap<>();
                 parameterBody.put("username", username);
-                parameterBody.put("friend_username", mUsernames.get(position));
+                parameterBody.put("requestID", mRequestNumbers.get(position).toString());
                 parameterBody.put("token", atlasLoginKey);
-               // mGeneralRequest.POSTRequest("DenyFriend.php", parameterBody, new DenyFriendRequestResponder());
+                mGeneralRequest.POSTRequest("DenyRequest.php", parameterBody, new RejectDeliveryRequestResponder());
             }
         });
 
@@ -126,9 +130,9 @@ public class DeliveriesArrayAdapter extends BaseAdapter implements ListAdapter
 
                 Map<String, String> parameterBody = new HashMap<>();
                 parameterBody.put("username", username);
-                parameterBody.put("friend_username", mUsernames.get(position));
+                parameterBody.put("requestID", mRequestNumbers.get(position).toString());
                 parameterBody.put("token", atlasLoginKey);
-               // mGeneralRequest.POSTRequest("ConfirmFriend.php", parameterBody, new ConfirmFriendRequestResponder());
+                mGeneralRequest.POSTRequest("ApproveRequest.php", parameterBody, new AcceptDeliveryRequestResponder());
             }
         });
 
