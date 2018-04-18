@@ -23,8 +23,13 @@ import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.json.JSONArray;
@@ -39,17 +44,16 @@ import java.util.TimerTask;
 
 import static com.nathantspencer.atlas.LoginActivity.mGeneralRequest;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private LocationManager mLocationManager;
-    private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationClient;
     private Context mContext;
 
     private FloatingActionButton mSignOutButton;
     private View mAddFriendButton;
     private TextView mPendingDeliveriesText;
-    private MapFragment mMapFragment;
+    private SupportMapFragment mMapFragment;
     private ListView mFriendsList;
     private ListView mDeliveriesList;
 
@@ -63,6 +67,10 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> mDeliveryDescriptions;
     private ArrayList<String> mDeliveryRequestNumber;
 
+    private GoogleMap mMap;
+    private LatLng mLocation;
+    private Boolean mInitalLocationSet;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -74,10 +82,7 @@ public class MainActivity extends AppCompatActivity {
             mFriendsList.setVisibility(View.GONE);
             mDeliveriesList.setVisibility(View.GONE);
             mPendingDeliveriesText.setVisibility(View.GONE);
-
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.hide(mMapFragment);
-            fragmentTransaction.commit();
+            mMapFragment.getView().setVisibility(View.GONE);
 
             switch (item.getItemId()) {
 
@@ -87,10 +92,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
 
                 case R.id.navigation_map:
-                    fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.show(mMapFragment);
-                    fragmentTransaction.commit();
-
+                    mMapFragment.getView().setVisibility(View.VISIBLE);
                     Criteria criteria = new Criteria();
                     criteria.setAccuracy(Criteria.ACCURACY_FINE);
                     return true;
@@ -321,9 +323,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mInitalLocationSet = false;
+
+        mMapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map_view);
+        mMapFragment.getMapAsync(this);
+        mMapFragment.getView().setVisibility(View.GONE);
+
         mSignOutButton = (FloatingActionButton) findViewById(R.id.signOutButton);
         mAddFriendButton = findViewById(R.id.add_friend_button);
-        mMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map_view);
         mFriendsList = (ListView) findViewById(R.id.friend_list);
         mDeliveriesList =  (ListView) findViewById(R.id.delivery_list);
         mPendingDeliveriesText = (TextView) findViewById(R.id.pending_deliveries_text);
@@ -366,12 +374,29 @@ public class MainActivity extends AppCompatActivity {
                                     final String username = sharedPref.getString("atlasUsername", "");
                                     final String atlasLoginKey = sharedPref.getString("atlasLoginKey", "");
 
+                                    mLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
                                     Map<String, String> parameterBody = new HashMap<>();
                                     parameterBody.put("username", username);
                                     parameterBody.put("token", atlasLoginKey);
                                     parameterBody.put("longitude", Double.toString(location.getLongitude()));
                                     parameterBody.put("latitude", Double.toString(location.getLatitude()));
                                     mGeneralRequest.POSTRequest("UpdateUserLocation.php", parameterBody, new UpdateUserLocationRequestResponder());
+
+                                    if (mLocation != null)
+                                    {
+                                        mMap.clear();
+
+                                        mMap.addMarker(new MarkerOptions().position(mLocation)
+                                                .title("Your Location"));
+
+                                        if(!mInitalLocationSet)
+                                        {
+                                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 17.5f));
+                                            mInitalLocationSet = true;
+                                        }
+
+                                    }
                                 }
                             }
                         });
@@ -384,10 +409,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }, 0, 5000);
-
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.hide(mMapFragment);
-        fragmentTransaction.commit();
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -430,4 +451,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap)
+    {
+        mMap = googleMap;
+    }
 }
