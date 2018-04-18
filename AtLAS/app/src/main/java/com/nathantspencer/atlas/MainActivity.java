@@ -150,6 +150,60 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    private class GetDroneLocationRequestResponder implements RequestResponder {
+
+        GetDroneLocationRequestResponder()
+        {
+        }
+
+        public void onResponse(String response)
+        {
+            int x = 1;
+
+        }
+    }
+
+    private class GetDeliveriesRequestResponder implements RequestResponder {
+
+        GetDeliveriesRequestResponder()
+        {
+        }
+
+        public void onResponse(String response)
+        {
+            try
+            {
+                JSONObject jsonResponse = new JSONObject(response);
+                JSONArray deliveries = jsonResponse.getJSONArray("pending_requests");
+
+                SharedPreferences sharedPref = MainActivity.this.getSharedPreferences("AUTH", Context.MODE_PRIVATE);
+                final String username = sharedPref.getString("atlasUsername", "");
+                final String atlasLoginKey = sharedPref.getString("atlasLoginKey", "");
+
+                for(int i = 0; i < deliveries.length(); ++i)
+                {
+                    JSONObject delivery = deliveries.getJSONObject(i);
+                    if(delivery.getBoolean("waiting_for_us"))
+                    {
+                        continue;
+                    }
+
+                    Map<String, String> parameterBody = new HashMap<>();
+                    parameterBody.put("username", username);
+                    parameterBody.put("token", atlasLoginKey);
+                    parameterBody.put("delivery_id", delivery.getString("delivery_id"));
+
+                    mGeneralRequest.POSTRequest("GetDroneLocation.php", parameterBody, new GetDroneLocationRequestResponder());
+                }
+            }
+            catch(JSONException e)
+            {
+            }
+
+        }
+    }
+
+
     private class UpdateUserLocationRequestResponder implements RequestResponder {
 
         UpdateUserLocationRequestResponder()
@@ -382,6 +436,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     parameterBody.put("longitude", Double.toString(location.getLongitude()));
                                     parameterBody.put("latitude", Double.toString(location.getLatitude()));
                                     mGeneralRequest.POSTRequest("UpdateUserLocation.php", parameterBody, new UpdateUserLocationRequestResponder());
+
+                                    Map<String, String> deliveriesBody = new HashMap<>();
+                                    deliveriesBody.put("username", username);
+                                    deliveriesBody.put("token", atlasLoginKey);
+                                    mGeneralRequest.GETRequest("GetDeliveries.php", deliveriesBody, new GetDeliveriesRequestResponder());
 
                                     if (mLocation != null)
                                     {
