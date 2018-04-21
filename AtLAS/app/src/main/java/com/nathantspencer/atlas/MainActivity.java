@@ -158,8 +158,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         public void onResponse(String response)
         {
-            int x = 1;
+            try
+            {
+                // TODO: ensure this actually agrees with the endpoint...
 
+                JSONObject jsonResponse = new JSONObject(response);
+                Double latitude = jsonResponse.getDouble("latitude");
+                Double longitude = jsonResponse.getDouble("longitude");
+                LatLng droneLocation = new LatLng(latitude, longitude);
+
+                mMap.addMarker(new MarkerOptions().position(droneLocation)
+                        .title("Drone Location"));
+
+            }
+            catch(JSONException e)
+            {
+            }
         }
     }
 
