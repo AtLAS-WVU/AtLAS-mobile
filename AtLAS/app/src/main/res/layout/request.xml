@@ -2,11 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/friend_list_item"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
-    android:id="@+id/friend_list_item"
     tools:context="com.nathantspencer.atlas.MainActivity">
 
     <ImageButton
@@ -47,7 +47,7 @@
         android:layout_marginTop="13dp"
         android:layout_toEndOf="@+id/friend_avi"
         android:layout_toRightOf="@+id/friend_avi"
-        android:paddingBottom="2dp"
+        android:paddingBottom="16dp"
         android:paddingLeft="12dp"
         android:paddingTop="0dp"
         android:text="Message"
@@ -72,12 +72,10 @@
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/list_item_string"
-        android:layout_alignBottom="@+id/list_item_string"
+        android:layout_alignBaseline="@+id/description"
+        android:layout_alignBottom="@+id/description"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginEnd="17dp"
-        android:layout_marginRight="17dp"
+        android:layout_marginEnd="21dp"
         android:text="REJECT"
         android:theme="@style/NegativeButtonTheme" />
 
@@ -87,9 +85,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/reject_delivery"
         android:layout_toStartOf="@+id/reject_delivery"
+        android:paddingTop="0dp"
         android:text="ACCEPT"
+        android:textAlignment="gravity"
         android:theme="@style/PositiveButtonTheme" />
 
 </RelativeLayout>

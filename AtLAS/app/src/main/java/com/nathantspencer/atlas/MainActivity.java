@@ -163,13 +163,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 // TODO: ensure this actually agrees with the endpoint...
 
                 JSONObject jsonResponse = new JSONObject(response);
-                Double latitude = jsonResponse.getDouble("latitude");
-                Double longitude = jsonResponse.getDouble("longitude");
-                LatLng droneLocation = new LatLng(latitude, longitude);
+                JSONArray deliveries = jsonResponse.getJSONArray("delivery_data");
+                for(int i = 0; i < deliveries.length(); ++i)
+                {
+                    JSONObject deliveryData = deliveries.getJSONObject(i);
 
-                mMap.addMarker(new MarkerOptions().position(droneLocation)
-                        .title("Drone Location"));
+                    Double latitude = deliveryData.getDouble("latitude");
+                    Double longitude = deliveryData.getDouble("longitude");
+                    LatLng droneLocation = new LatLng(latitude, longitude);
 
+                    mMap.addMarker(new MarkerOptions().position(droneLocation)
+                            .title("Drone Location"));
+
+                }
             }
             catch(JSONException e)
             {
@@ -451,17 +457,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     parameterBody.put("latitude", Double.toString(location.getLatitude()));
                                     mGeneralRequest.POSTRequest("UpdateUserLocation.php", parameterBody, new UpdateUserLocationRequestResponder());
 
-                                    Map<String, String> deliveriesBody = new HashMap<>();
-                                    deliveriesBody.put("username", username);
-                                    deliveriesBody.put("token", atlasLoginKey);
-                                    mGeneralRequest.GETRequest("GetDeliveries.php", deliveriesBody, new GetDeliveriesRequestResponder());
-
                                     if (mLocation != null)
                                     {
                                         mMap.clear();
 
                                         mMap.addMarker(new MarkerOptions().position(mLocation)
                                                 .title("Your Location"));
+
+                                        Map<String, String> deliveriesBody = new HashMap<>();
+                                        deliveriesBody.put("username", username);
+                                        deliveriesBody.put("token", atlasLoginKey);
+                                        mGeneralRequest.GETRequest("GetDeliveries.php", deliveriesBody, new GetDeliveriesRequestResponder());
 
                                         if(!mInitalLocationSet)
                                         {
