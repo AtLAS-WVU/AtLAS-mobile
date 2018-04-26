@@ -126,15 +126,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 if(success)
                 {
-                    JSONArray requests = jsonResponse.getJSONArray("pending_requests");
-                    for (int i = 0; i < requests.length(); i++)
+                    try
                     {
-                        JSONObject request = requests.getJSONObject(i);
-                        mDeliveryUsernames.add(request.get("receiver_username").toString());
-                        mDeliveryStatuses.add(request.get("request_date").toString());
-                        mDeliveryDescriptions.add(request.get("delivery_message").toString());
-                        mDeliveryIsPending.add(request.getBoolean("can_we_approve"));
-                        mDeliveryRequestNumber.add(request.get("requestID").toString());
+                        JSONArray requests = jsonResponse.getJSONArray("pending_requests");
+                        for (int i = 0; i < requests.length(); i++) {
+                            JSONObject request = requests.getJSONObject(i);
+                            mDeliveryUsernames.add(request.get("receiver_username").toString());
+                            mDeliveryStatuses.add(request.get("request_date").toString());
+                            mDeliveryDescriptions.add(request.get("delivery_message").toString());
+                            mDeliveryIsPending.add(request.getBoolean("can_we_approve"));
+                            mDeliveryRequestNumber.add(request.get("requestID").toString());
+                        }
+                    }
+                    catch(Exception e)
+                    {
+
                     }
                 }
 
