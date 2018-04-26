@@ -86,7 +86,6 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toStartOf="@+id/reject_delivery"
-        android:paddingTop="0dp"
         android:text="ACCEPT"
         android:textAlignment="gravity"
         android:theme="@style/PositiveButtonTheme" />

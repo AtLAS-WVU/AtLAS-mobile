@@ -28,6 +28,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -179,7 +180,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     LatLng droneLocation = new LatLng(latitude, longitude);
 
                     mMap.addMarker(new MarkerOptions().position(droneLocation)
-                            .title("Drone Location"));
+                            .title("Drone Location")
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
                 }
             }
@@ -477,7 +479,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                                         if(!mInitalLocationSet)
                                         {
-                                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 17.5f));
+                                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 10.0f));
                                             mInitalLocationSet = true;
                                         }
 
